@@ -12,7 +12,7 @@
 # Requirements: Must be run as an identity with Owner permissions at the scope
 #     of the target subcription to be moved.
 
-$SubscriptionId = "f8ed2abd-3ee2-4509-a99f-a027fc96568e"
+$SubscriptionId = "<enter subscription id here>"
 
 $SubscriptionContext = Select-AzSubscription -SubscriptionId $SubscriptionId
 #Connect-AzureAD
