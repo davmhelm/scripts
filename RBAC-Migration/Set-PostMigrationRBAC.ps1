@@ -19,7 +19,7 @@
 # automation of mapping identities from source to destination AAD tenant is 
 # beyond the scope of this script
 
-$SubscriptionId = ""
+$SubscriptionId = "<enter subscription id here>"
 
 $SubscriptionContext = Select-AzSubscription -SubscriptionId $SubscriptionId
 if ($null -eq $SubscriptionContext) {
@@ -89,7 +89,7 @@ if ( Test-Path -Path $sourceKeyVaultPoliciesFile -PathType Leaf ) {
         # Commit Tenant ID and access policy changes to vault
         Set-AzResource -ResourceId $vaultProps.ResourceId -Properties $vaultProps.Properties -Force
 
-        # TODO: Populate policies from policy array
+        # Populate KV policies from policy array
         $keyVaultPolicyArray `
           | Where-Object { $_.ResourceId -eq $vaultProps.ResourceId } `
           | foreach-object {
