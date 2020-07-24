@@ -36,10 +36,10 @@ az login
 az account set -s "${SOURCE_SUBSCRIPTION}"
 for loc in $LOCATIONS; do
   limitsfile=LIMITS_${SOURCE_SUBSCRIPTION}_${loc}.tsv
-  az vm list-usage --location $loc --query "[].{type:'Microsoft.Compute',name:name.value,limit:limit}" -o tsv > $limitsfile
-  az network list-usages --location $loc --query "[].{type:'Microsoft.Network',name:name.value,limit:limit}" -o tsv >> $limitsfile
-  az storage account show-usage --location $loc --query "{type:'Microsoft.Storage/storageAccounts',limit:limit,name:name.value}" -o tsv >> $limitsfile
-  az sql list-usages --location $loc --query "[].{type:'Microsoft.Sql',limit:limit,name:name}" -o tsv >> $limitsfile
+  az vm list-usage --location $loc --query "[].{type:'Microsoft.Compute',name:name.value,limit:limit}" -o tsv > "$limitsfile"
+  az network list-usages --location $loc --query "[].{type:'Microsoft.Network',name:name.value,limit:limit}" -o tsv >> "$limitsfile"
+  az storage account show-usage --location $loc --query "{type:'Microsoft.Storage/storageAccounts',limit:limit,name:name.value}" -o tsv >> "$limitsfile"
+  az sql list-usages --location $loc --query "[].{type:'Microsoft.Sql',limit:limit,name:name}" -o tsv >> "$limitsfile"
   sort $limitsfile > $limitsfile
 done
 
@@ -47,10 +47,10 @@ done
 az account set -s "${DESTINATION_SUBSCRIPTION}"
 for loc in $LOCATIONS; do
   limitsfile=LIMITS_${DESTINATION_SUBSCRIPTION}_${loc}.tsv
-  az vm list-usage --location $loc --query "[].{type:'Microsoft.Compute',name:name.value,limit:limit}" -o tsv > $limitsfile
-  az network list-usages --location $loc --query "[].{type:'Microsoft.Network',name:name.value,limit:limit}" -o tsv >> $limitsfile
-  az storage account show-usage --location $loc --query "{type:'Microsoft.Storage/storageAccounts',limit:limit,name:name.value}" -o tsv >> $limitsfile
-  az sql list-usages --location $loc --query "[].{type:'Microsoft.Sql',limit:limit,name:name}" -o tsv >> $limitsfile
+  az vm list-usage --location $loc --query "[].{type:'Microsoft.Compute',name:name.value,limit:limit}" -o tsv > "$limitsfile"
+  az network list-usages --location $loc --query "[].{type:'Microsoft.Network',name:name.value,limit:limit}" -o tsv >> "$limitsfile"
+  az storage account show-usage --location $loc --query "{type:'Microsoft.Storage/storageAccounts',limit:limit,name:name.value}" -o tsv >> "$limitsfile"
+  az sql list-usages --location $loc --query "[].{type:'Microsoft.Sql',limit:limit,name:name}" -o tsv >> "$limitsfile"
   sort $limitsfile > $limitsfile
 done
 
@@ -58,5 +58,5 @@ done
 for loc in $LOCATIONS; do
   srclimitsfile=LIMITS_${SOURCE_SUBSCRIPTION}_${loc}.tsv
   destlimitsfile=LIMITS_${DESTINATION_SUBSCRIPTION}_${loc}.tsv
-  diff -ys ${srclimitsfile} ${destlimitsfile}
+  diff -ys "${srclimitsfile}" "${destlimitsfile}"
 done
