@@ -14,6 +14,10 @@
 # in an attempt to simplify finding quota increases to request as part of moving 
 # resources from one subscription to another
 
+# DEPENDS ON
+# Azure CLI (tested on 2.9.1)
+# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
+
 # AUTHOR
 # Dave Helm (dahelm)
 
