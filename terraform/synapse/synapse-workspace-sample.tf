@@ -97,6 +97,15 @@ resource "azurerm_synapse_firewall_rule" "example" {
   end_ip_address       = "255.255.255.255"
 }
 
+# Enabling "Allow access to Azure services" is achieved per Note in 
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_firewall_rule#argument-reference
+resource "azurerm_synapse_firewall_rule" "example2" {
+  name                 = "AllowAllWindowsAzureIps"
+  synapse_workspace_id = azurerm_synapse_workspace.example.id
+  start_ip_address     = "0.0.0.0"
+  end_ip_address       = "0.0.0.0"
+}
+
 # Use blocks like this to assign access in Synapse Workspace Studio for other identities
 # Useful when your TF plan is running as a service principal/managed identity
 # By default, the identity creating the workspace will be added as a Workspace Admin
