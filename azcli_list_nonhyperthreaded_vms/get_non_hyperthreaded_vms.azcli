@@ -1,0 +1,28 @@
+# This script demonstrates how to get VMs that don't use hyperthreaded cores
+# Sometimes you need a VM that doesn't use hyperthreading because a piece of
+# software doesn't handle it well, and setting CPU affinity on processes at
+# execution time adds administrative overhead
+
+# parameters
+SubscriptionID={Enter Your Subscription GUID here}
+Region={Enter your shortname region here, ex 'westus2'}
+
+# Script
+
+# REST API to call
+# https://docs.microsoft.com/en-us/rest/api/compute/resource-skus/list
+ApiUrl="https://management.azure.com/subscriptions/$SubcriptionID/providers/Microsoft.Compute/skus?api-version=2019-04-01&\$filter=location eq '$region'"
+
+# This JMESPath query does the following:
+# 1. filters the results of the API call down to VM resource type, then 
+# 2. filters those results to VMs that 
+#    a. have 1 vCPU per physical core, and 
+#    b. can be deployed currently without restrictions (working around 
+#       Bash's behavior with exclamation points)
+# 3. finally, return an array of objects with the properties of interest 
+#    (name, vCPUs, Memory in GB, and vCPUs Per core which should be 1)
+querystring="value[?resourceType == 'virtualMachines'] | [?(capabilities[?name == 'vCPUsPerCore' && value == '1'] && "'!'"restrictions)].{name:name, vCPUs:capabilities[?name == 'vCPUs'].value | [0], MemoryGB:capabilities[?name == 'MemoryGB'].value | [0], vCPUsPerCore:capabilities[?name == 'vCPUsPerCore'].value| [0]}"
+
+az login
+
+az rest --method GET --url "$ApiUrl" --query "$querystring"
